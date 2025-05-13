@@ -3,8 +3,6 @@ import java.io.*;
 import org.json.JSONObject;
 
 public class ApiUtil {
-    private static final String API_SERVER = "http://172.30.1.41:8888"; // Flask 서버 주소
-//테스트 실행 할 땐 내부망 : http://172.30.1.41:8888 / 배포할 땐 외부망 : http://118.44.154.168:8888
     public static void saveUserInfo(String studentId, String pw, String hint, int timerMin) {
         try {
             JSONObject data = new JSONObject();
@@ -13,7 +11,8 @@ public class ApiUtil {
             data.put("hint", hint);
             data.put("timer_min", timerMin);
 
-            URL url = new URI(API_SERVER + "/save_user").toURL();
+            // Main 클래스의 상수 사용
+            URL url = new URI(Main.API_SERVER + "/save_user").toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -33,5 +32,10 @@ public class ApiUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void printApiInfo() {
+        System.out.println(Main.API_SERVER);
+        System.out.println(Main.CURRENT_VERSION);
     }
 }

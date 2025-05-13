@@ -4,12 +4,9 @@ import javax.swing.*;
 import org.json.JSONObject;
 
 public class UpdateUtil {
-    private static final String API_SERVER = "http://172.30.1.41:8888";
-    private static final String CURRENT_VERSION = "1.0.0";
-//테스트 실행 할 땐 내부망 : http://172.30.1.41:8888 / 배포할 땐 외부망 : http://118.44.154.168:8888
     public static void checkUpdate() {
         try {
-            URL url = new URI(API_SERVER + "/check_update").toURL();
+            URL url = new URI(Main.API_SERVER + "/check_update").toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5000);
@@ -24,7 +21,7 @@ public class UpdateUtil {
                 JSONObject data = new JSONObject(sb.toString());
                 String latestVersion = data.optString("latest_version");
                 String downloadUrl = data.optString("download_url");
-                if (!CURRENT_VERSION.equals(latestVersion) && !latestVersion.isEmpty()) {
+                if (!Main.CURRENT_VERSION.equals(latestVersion) && !latestVersion.isEmpty()) {
                     downloadAndReplace(downloadUrl);
                 }
             }
