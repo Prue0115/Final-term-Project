@@ -203,7 +203,7 @@ public class CampusSeat extends JFrame {
         helpBtn.setSize(new Dimension(helpIconSize, helpIconSize));
         helpBtn.addActionListener(e -> JOptionPane.showMessageDialog(
             this,
-            "관리자 : 010-9903-5655",
+            "관리자 : ###-####-####",
             "도움말",
             JOptionPane.INFORMATION_MESSAGE,
             helpIcon // 다이얼로그에도 같은 아이콘 사용
