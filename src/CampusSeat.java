@@ -263,7 +263,7 @@ public class CampusSeat extends JFrame {
         if (pw.equals(userPw)) {
             unlocked = true;
             unlockScreen("비밀번호가 맞습니다. 잠금 해제");
-        } else if (pw.equals("020115")) {
+        } else if (pw.equals("#####")) {
             unlocked = true;
             unlockScreen("관리자 권한으로 잠금 해제");
         } else {
