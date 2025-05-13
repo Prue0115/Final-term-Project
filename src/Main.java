@@ -1,9 +1,9 @@
 public class Main {
-    public static final String API_SERVER = "http://000.00.000.000:8888"; //API 서버 주소
+    public static final String API_SERVER = "http://000.00.000.000:####"; //API 서버 주소
     
     public static final String CURRENT_VERSION = "1.0.0"; //현재 버전
 
-    // 테스트 실행 할 땐 내부망 : http://내부IP:8888 / 배포할 땐 외부망 : http://외부IP:8888
+    // 테스트 실행 할 땐 내부망 : http://내부IP:#### / 배포할 땐 외부망 : http://외부IP:####
     public static void main(String[] args) {
         // API 서버 주소와 버전 정보 출력 (확인용)
         System.out.println("API 서버 주소: " + API_SERVER);
