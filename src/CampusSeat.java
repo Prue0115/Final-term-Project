@@ -108,29 +108,26 @@ public class CampusSeat extends JFrame {
         datetimeLabel = new JLabel("", SwingConstants.CENTER);
         datetimeLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
         datetimeLabel.setForeground(Color.WHITE);
+        datetimeLabel.setPreferredSize(new Dimension(400, 50));
         centerPanel.add(datetimeLabel, gbc);
 
         gbc.gridy++;
         timerLabel = new JLabel("", SwingConstants.CENTER);
         timerLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
         timerLabel.setForeground(Color.WHITE);
+        timerLabel.setPreferredSize(new Dimension(400, 30));
         centerPanel.add(timerLabel, gbc);
 
         gbc.gridy++;
-        gbc.gridwidth = 1;
-
-        // ====== 힌트 라벨을 비밀번호 입력 박스 위에 배치 ======
-        gbc.gridx = 0;
         gbc.gridwidth = 2;
-        hintLabel = new JLabel("", SwingConstants.CENTER);
-        hintLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
-        hintLabel.setForeground(Color.LIGHT_GRAY);
-        centerPanel.add(hintLabel, gbc);
 
-        // ====== 비밀번호 입력 필드와 도움말 버튼을 나란히 배치 ======
-        gbc.gridy++;
-        gbc.gridwidth = 2;
-        gbc.gridx = 0;
+        // ====== 화면 크기에 따라 비밀번호 입력 필드와 도움말 버튼을 동적으로 아래쪽에 배치 ======
+        // 화면 높이의 60% 위치에 배치
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight = screenSize.height;
+        int topMargin = (int)(screenHeight * 0.6);
+
+        gbc.insets = new Insets(topMargin, 20, 20, 20);
 
         JPanel pwAndHelpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pwAndHelpPanel.setOpaque(false);
@@ -212,10 +209,24 @@ public class CampusSeat extends JFrame {
             helpIcon // 다이얼로그에도 같은 아이콘 사용
         ));
 
+        // ====== 비밀번호 입력 필드와 도움말 버튼을 나란히 배치 (이전 위치로) ======
+        gbc.gridy++;
+        Dimension screenSize2 = Toolkit.getDefaultToolkit().getScreenSize();
+        int screenHeight2 = screenSize2.height;
+        int pwMargin = (int)(screenHeight2 * 0.6); // 화면 높이의 60% 위치
+        gbc.insets = new Insets(pwMargin, 0, 0, 0);
         pwAndHelpPanel.add(pwField);
         pwAndHelpPanel.add(helpBtn);
-
         centerPanel.add(pwAndHelpPanel, gbc);
+
+        // ====== 힌트 라벨 위치 ======
+        gbc.gridy++;
+        gbc.insets = new Insets(0, 0, 0, 0); // 여백 없음
+        hintLabel = new JLabel(" ", SwingConstants.CENTER); // 공백으로 초기화
+        hintLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
+        hintLabel.setForeground(Color.LIGHT_GRAY);
+        hintLabel.setPreferredSize(new Dimension(280, 24)); // 최소 높이 지정(원하는 값으로)
+        centerPanel.add(hintLabel, gbc);
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         setContentPane(mainPanel);
@@ -251,12 +262,12 @@ public class CampusSeat extends JFrame {
         String pw = new String(pwField.getPassword());
         if (pw.equals(userPw)) {
             unlocked = true;
-            unlockScreen("비밀번호가 맞습니다. 잠금 해제!");
+            unlockScreen("비밀번호가 맞습니다. 잠금 해제");
         } else if (pw.equals("020115")) {
             unlocked = true;
-            unlockScreen("관리자 권한으로 잠금 해제!");
+            unlockScreen("관리자 권한으로 잠금 해제");
         } else {
-            hintLabel.setText("힌트: " + hint);
+            hintLabel.setText(hint); // "힌트: " 없이 힌트만 표시
             JOptionPane.showMessageDialog(this, "비밀번호가 틀렸습니다.", "오류", JOptionPane.ERROR_MESSAGE);
             pwField.setText("");
         }
