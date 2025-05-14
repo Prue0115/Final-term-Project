@@ -211,8 +211,10 @@ public class CampusSeat extends JFrame {
 
         // ====== macOS 로그인 화면처럼 힌트가 위, 암호 입력이 아래로 오도록 배치 ======
 
-        // 1. 힌트 라벨을 화면 아래쪽(약 70%)에 먼저 배치
+        // 1. 힌트 라벨을 화면 아래쪽(약 70%)에 먼저 배치 (x값 중앙 정렬, y값 유지)
         gbc.gridy++;
+        gbc.gridx = 0; // 중앙 정렬
+        gbc.anchor = GridBagConstraints.CENTER; // 중앙 anchor
         int macMargin = (int)(screenHeight * 0.7); // 화면 높이의 70% 위치
         gbc.insets = new Insets(macMargin, 0, 0, 0);
         hintLabel = new JLabel(" ", SwingConstants.CENTER);
@@ -221,8 +223,10 @@ public class CampusSeat extends JFrame {
         hintLabel.setPreferredSize(new Dimension(280, 24));
         centerPanel.add(hintLabel, gbc);
 
-        // 2. 비밀번호 입력 필드와 도움말 버튼을 힌트 아래에 배치 (간격 10px)
+        // 2. 비밀번호 입력 필드와 도움말 버튼을 힌트 아래에 배치 (x값 중앙 정렬, y값 유지)
         gbc.gridy++;
+        gbc.gridx = 0; // 중앙 정렬
+        gbc.anchor = GridBagConstraints.CENTER; // 중앙 anchor
         gbc.insets = new Insets(10, 0, 0, 0);
         pwAndHelpPanel.add(pwField);
         pwAndHelpPanel.add(helpBtn);
