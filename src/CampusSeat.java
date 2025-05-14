@@ -203,7 +203,7 @@ public class CampusSeat extends JFrame {
         helpBtn.setSize(new Dimension(helpIconSize, helpIconSize));
         helpBtn.addActionListener(e -> JOptionPane.showMessageDialog(
             this,
-            "관리자 : 010-9903-5655",
+            "관리자 : ###-####-####",
             "도움말",
             JOptionPane.INFORMATION_MESSAGE,
             helpIcon // 다이얼로그에도 같은 아이콘 사용
@@ -263,7 +263,7 @@ public class CampusSeat extends JFrame {
         if (pw.equals(userPw)) {
             unlocked = true;
             unlockScreen("비밀번호가 맞습니다. 잠금 해제");
-        } else if (pw.equals("020115")) {
+        } else if (pw.equals("#####")) {
             unlocked = true;
             unlockScreen("관리자 권한으로 잠금 해제");
         } else {
