@@ -209,24 +209,24 @@ public class CampusSeat extends JFrame {
             helpIcon // 다이얼로그에도 같은 아이콘 사용
         ));
 
-        // ====== 비밀번호 입력 필드와 도움말 버튼을 나란히 배치 (이전 위치로) ======
+        // ====== macOS 로그인 화면처럼 힌트가 위, 암호 입력이 아래로 오도록 배치 ======
+
+        // 1. 힌트 라벨을 화면 아래쪽(약 70%)에 먼저 배치
         gbc.gridy++;
-        Dimension screenSize2 = Toolkit.getDefaultToolkit().getScreenSize();
-        int screenHeight2 = screenSize2.height;
-        int pwMargin = (int)(screenHeight2 * 0.6); // 화면 높이의 60% 위치
-        gbc.insets = new Insets(pwMargin, 0, 0, 0);
+        int macMargin = (int)(screenHeight * 0.7); // 화면 높이의 70% 위치
+        gbc.insets = new Insets(macMargin, 0, 0, 0);
+        hintLabel = new JLabel(" ", SwingConstants.CENTER);
+        hintLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        hintLabel.setForeground(new Color(220, 220, 220));
+        hintLabel.setPreferredSize(new Dimension(280, 24));
+        centerPanel.add(hintLabel, gbc);
+
+        // 2. 비밀번호 입력 필드와 도움말 버튼을 힌트 아래에 배치 (간격 10px)
+        gbc.gridy++;
+        gbc.insets = new Insets(10, 0, 0, 0);
         pwAndHelpPanel.add(pwField);
         pwAndHelpPanel.add(helpBtn);
         centerPanel.add(pwAndHelpPanel, gbc);
-
-        // ====== 힌트 라벨 위치 ======
-        gbc.gridy++;
-        gbc.insets = new Insets(0, 0, 0, 0); // 여백 없음
-        hintLabel = new JLabel(" ", SwingConstants.CENTER); // 공백으로 초기화
-        hintLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
-        hintLabel.setForeground(Color.LIGHT_GRAY);
-        hintLabel.setPreferredSize(new Dimension(280, 24)); // 최소 높이 지정(원하는 값으로)
-        centerPanel.add(hintLabel, gbc);
 
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         setContentPane(mainPanel);

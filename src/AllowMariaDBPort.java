@@ -5,7 +5,7 @@ public class AllowMariaDBPort {
             try {
                 ProcessBuilder pb = new ProcessBuilder(
                         "netsh", "advfirewall", "firewall", "add", "rule",
-                        "name=locker", "dir=in", "action=allow",
+                        "name=campusseat", "dir=in", "action=allow",
                         "protocol=TCP", "localport=3306"
                 );
                 pb.redirectErrorStream(true);
