@@ -11,6 +11,7 @@ public class CampusSeat extends JFrame {
     private Timer timer;
     private JPasswordField pwField;
     private JLabel hintLabel, timerLabel, datetimeLabel;
+    private JLabel dateLabel; // 날짜+요일 라벨 추가
 
     public CampusSeat(String userPw, String hint, int timerMin) {
         this.userPw = userPw;
@@ -66,7 +67,8 @@ public class CampusSeat extends JFrame {
             int result = JOptionPane.showConfirmDialog(this, "정말 시스템을 종료하시겠습니까?", "종료 확인", JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 try {
-                    Runtime.getRuntime().exec("shutdown -s -t 0");
+                    // 시스템 종료
+                    new ProcessBuilder("shutdown", "-s", "-t", "0").start();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "시스템 종료 명령 실행 실패", "오류", JOptionPane.ERROR_MESSAGE);
                 }
@@ -77,7 +79,8 @@ public class CampusSeat extends JFrame {
             int result = JOptionPane.showConfirmDialog(this, "정말 시스템을 재시동하시겠습니까?", "재시동 확인", JOptionPane.YES_NO_OPTION);
             if (result == JOptionPane.YES_OPTION) {
                 try {
-                    Runtime.getRuntime().exec("shutdown -r -t 0");
+                    // 시스템 재시동
+                    new ProcessBuilder("shutdown", "-r", "-t", "0").start();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "시스템 재시동 명령 실행 실패", "오류", JOptionPane.ERROR_MESSAGE);
                 }
@@ -88,12 +91,30 @@ public class CampusSeat extends JFrame {
 
         powerBtn.addActionListener(e -> powerMenu.show(powerBtn, 0, powerBtn.getHeight()));
 
-        // 오른쪽 끝에 버튼 배치
+        // 상단(전원버튼+남은시간) 패널을 하나로 합침
+        JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.setOpaque(false);
+
+        // 남은 시간 라벨 먼저 생성
+        timerLabel = new JLabel("", SwingConstants.LEFT);
+        timerLabel.setFont(new Font("Malgun Gothic", Font.PLAIN, 24));
+        timerLabel.setForeground(Color.WHITE);
+        timerLabel.setPreferredSize(new Dimension(200, 30));
+
+        // 좌측: 남은 시간
+        JPanel timerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        timerPanel.setOpaque(false);
+        timerPanel.add(timerLabel);
+        northPanel.add(timerPanel, BorderLayout.WEST); // ← 이 줄을 추가하세요!
+
+        // 우측: 전원버튼
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         rightPanel.setOpaque(false);
         rightPanel.add(powerBtn);
-        topPanel.add(rightPanel, BorderLayout.EAST);
-        mainPanel.add(topPanel, BorderLayout.NORTH);
+        northPanel.add(rightPanel, BorderLayout.EAST);
+
+        // mainPanel에 추가
+        mainPanel.add(northPanel, BorderLayout.NORTH);
 
         // 중앙 배치용 패널
         JPanel centerPanel = new JPanel(new GridBagLayout());
@@ -105,18 +126,26 @@ public class CampusSeat extends JFrame {
         gbc.gridy = 0;
         gbc.gridwidth = 2;
 
-        datetimeLabel = new JLabel("", SwingConstants.CENTER);
-        datetimeLabel.setFont(new Font("맑은 고딕", Font.BOLD, 40));
-        datetimeLabel.setForeground(Color.WHITE);
-        datetimeLabel.setPreferredSize(new Dimension(400, 50));
-        centerPanel.add(datetimeLabel, gbc);
+        // 폰트 설정
+        Font macFontMedium = new Font("Malgun Gothic", Font.PLAIN, 24);
+        Font macFontSmall = new Font("Malgun Gothic", Font.PLAIN, 16);
+        Font macFontPw = new Font("Malgun Gothic", Font.PLAIN, 20);
+        Font macFontPlaceholder = new Font("Malgun Gothic", Font.BOLD, 18);
 
+        // 날짜+요일 라벨 설정
+        dateLabel = new JLabel("", SwingConstants.CENTER);
+        dateLabel.setFont(macFontMedium);
+        dateLabel.setForeground(Color.WHITE);
+        dateLabel.setPreferredSize(new Dimension(400, 40));
+        centerPanel.add(dateLabel, gbc);
+
+        // 시간 라벨 설정
         gbc.gridy++;
-        timerLabel = new JLabel("", SwingConstants.CENTER);
-        timerLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 24));
-        timerLabel.setForeground(Color.WHITE);
-        timerLabel.setPreferredSize(new Dimension(400, 30));
-        centerPanel.add(timerLabel, gbc);
+        datetimeLabel = new JLabel("", SwingConstants.CENTER);
+        datetimeLabel.setFont(new Font("Malgun Gothic", Font.BOLD, 100)); // 시간 폰트 크기 조정
+        datetimeLabel.setForeground(Color.WHITE);
+        datetimeLabel.setPreferredSize(new Dimension(400, 90));
+        centerPanel.add(datetimeLabel, gbc);
 
         gbc.gridy++;
         gbc.gridwidth = 2;
@@ -134,7 +163,7 @@ public class CampusSeat extends JFrame {
 
         // 비밀번호 입력 필드 생성
         pwField = new JPasswordField();
-        pwField.setFont(new Font("맑은 고딕", Font.PLAIN, 20));
+        pwField.setFont(macFontPw);
         pwField.setBackground(new Color(220, 220, 220, 220));
         pwField.setOpaque(false);
 
@@ -154,7 +183,7 @@ public class CampusSeat extends JFrame {
 
                 // 플레이스홀더(암호 입력) 표시
                 if (pwField.getPassword().length == 0 && !pwField.isFocusOwner()) {
-                    g2.setFont(new Font("맑은 고딕", Font.BOLD, 18));
+                    g2.setFont(macFontPlaceholder);
                     g2.setColor(new Color(255, 255, 255, 140)); // 반투명 흰색
                     FontMetrics fm = g2.getFontMetrics();
                     String placeholder = "암호 입력";
@@ -218,7 +247,7 @@ public class CampusSeat extends JFrame {
         int macMargin = (int)(screenHeight * 0.7); // 화면 높이의 70% 위치
         gbc.insets = new Insets(macMargin, 0, 0, 0);
         hintLabel = new JLabel(" ", SwingConstants.CENTER);
-        hintLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 16));
+        hintLabel.setFont(macFontSmall);
         hintLabel.setForeground(new Color(220, 220, 220));
         hintLabel.setPreferredSize(new Dimension(280, 24));
         centerPanel.add(hintLabel, gbc);
@@ -240,14 +269,18 @@ public class CampusSeat extends JFrame {
         timer = new Timer(1000, e -> updateTimer());
         timer.start();
 
+        // updateDatetime 스레드 시작
         new Thread(this::updateDatetime).start();
     }
 
+    // 날짜/시간을 각각 갱신하도록 수정
     private void updateDatetime() {
+        java.time.format.DateTimeFormatter dateFmt = java.time.format.DateTimeFormatter.ofPattern("M월 d일 E요일");
+        java.time.format.DateTimeFormatter timeFmt = java.time.format.DateTimeFormatter.ofPattern("HH:mm");
         while (!unlocked) {
             java.time.LocalDateTime now = java.time.LocalDateTime.now();
-            String datetimeStr = now.toString().replace("T", " ").substring(0, 19);
-            datetimeLabel.setText(datetimeStr);
+            dateLabel.setText(now.format(dateFmt));
+            datetimeLabel.setText(now.format(timeFmt));
             try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
         }
     }
@@ -255,7 +288,8 @@ public class CampusSeat extends JFrame {
     private void updateTimer() {
         if (!unlocked && remaining > 0) {
             remaining--;
-            timerLabel.setText("남은 시간: " + (remaining/60) + "분 " + (remaining%60) + "초");
+            // "분:초" 형식으로만 표시 (예: 12:34)
+            timerLabel.setText(String.format("%d:%02d", remaining / 60, remaining % 60));
         } else if (!unlocked) {
             unlocked = true;
             unlockScreen("타이머 만료로 자동 해제되었습니다.");
@@ -267,7 +301,7 @@ public class CampusSeat extends JFrame {
         if (pw.equals(userPw)) {
             unlocked = true;
             unlockScreen("비밀번호가 맞습니다. 잠금 해제");
-        } else if (pw.equals("#####")) {
+        } else if (pw.equals("020115")) {
             unlocked = true;
             unlockScreen("관리자 권한으로 잠금 해제");
         } else {

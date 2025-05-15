@@ -1,5 +1,5 @@
 public class Main {
-    public static final String API_SERVER = "http://000.00.000.000:8888"; //API 서버 주소
+    public static final String API_SERVER = "http://172.30.1.41:8888"; //API 서버 주소
     
     public static final String CURRENT_VERSION = "1.0.0"; //현재 버전
 
