@@ -2,22 +2,23 @@ import java.net.*;
 import java.io.*;
 import org.json.JSONObject;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class ApiUtil {
     public static void saveUserInfo(String studentId, String pw, String hint, int timerMin) {
         try {
             JSONObject data = new JSONObject();
-            data.put("student_id", studentId);
-            data.put("password", pw);
-            data.put("hint", hint);
-            data.put("timer_min", timerMin);
+            data.put("학번", studentId);
+            data.put("암호", pw);
+            data.put("암호힌트", hint);
+            data.put("타이머", timerMin);
 
-            // 실행 시각 추가
-            String now = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            data.put("created_at", now);
+            // 한국 시간(Asia/Seoul)으로 실행 시각 추가
+            String now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            data.put("날짜-시간", now);
 
-            // Main 클래스의 상수 사용
             URL url = new URI(Main.API_SERVER + "/user").toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");

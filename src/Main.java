@@ -13,13 +13,8 @@ public class Main {
         String[] userInfo = SetupUserDialog.showDialog();
         if (userInfo == null) return;
 
-        String studentId = userInfo[0];
-        String pw = userInfo[1];
-        String hint = userInfo[2];
-        int timerMin = Integer.parseInt(userInfo[3]);
-
         javax.swing.SwingUtilities.invokeLater(() -> {
-            new CampusSeat(pw, hint, timerMin).setVisible(true);
+            new CampusSeat(userInfo[1], userInfo[2], Integer.parseInt(userInfo[3])).setVisible(true);
         });
     }
 }
