@@ -1,6 +1,8 @@
 import java.net.*;
 import java.io.*;
 import org.json.JSONObject;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ApiUtil {
     public static void saveUserInfo(String studentId, String pw, String hint, int timerMin) {
@@ -11,8 +13,12 @@ public class ApiUtil {
             data.put("hint", hint);
             data.put("timer_min", timerMin);
 
+            // 실행 시각 추가
+            String now = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            data.put("created_at", now);
+
             // Main 클래스의 상수 사용
-            URL url = new URI(Main.API_SERVER + "/save_user").toURL();
+            URL url = new URI(Main.API_SERVER + "/user").toURL();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
