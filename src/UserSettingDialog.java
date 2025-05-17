@@ -31,7 +31,7 @@ public class UserSettingDialog {
                 // 이전에 입력한 값들을 다시 보여줌
                 return showDialog(studentId, pw, hint, timerStr);
             }
-            ApiUtil.saveUserInfo(studentId, pw, hint, timerMin);
+            Config.saveUserInfo(studentId, pw, hint, timerMin);
             JOptionPane.showMessageDialog(null, "비밀번호와 타이머가 저장되었습니다.", "설정 완료", JOptionPane.INFORMATION_MESSAGE);
             return new String[] { studentId, pw, hint, String.valueOf(timerMin) };
         }

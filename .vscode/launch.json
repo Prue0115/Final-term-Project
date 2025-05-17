@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Config",
+            "request": "launch",
+            "mainClass": "Config",
+            "projectName": "Final-term-Project_45e35267"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
