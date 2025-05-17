@@ -66,7 +66,7 @@ public class UpdateUtil {
     public static void runUpdaterAndExit() {
         try {
             String updateDir = getUpdateDir();
-            String updaterPath = updateDir + "\\CampusSeat_updata.exe"; // 이름 변경
+            String updaterPath = updateDir + "\\CampusSeat_update.exe";
             String[] cmd = {
                 "powershell",
                 "Start-Process -FilePath '" + updaterPath + "' -Verb runAs"

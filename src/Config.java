@@ -6,7 +6,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class Config {
-    public static final String API_SERVER = "http://172.30.1.41:8888"; // API 서버 주소
+    public static final String API_SERVER = "http://campusseat.kro.kr:8888"; // API 서버 주소
     public static final String CURRENT_VERSION = "1.0.0"; // 현재 버전
 
     public static void saveUserInfo(String studentId, String pw, String hint, int timerMin) {
