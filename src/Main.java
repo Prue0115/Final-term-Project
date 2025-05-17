@@ -3,22 +3,22 @@ public class Main {
     public static final String CURRENT_VERSION = "1.0.0"; // 현재 버전
 
     public static void main(String[] args) {
-        // 설치 경로 먼저 지정
-        CampusSeatSetup.init();
-        String installPath = CampusSeatSetup.getInstallPath();
-
-        // API 서버 주소, 버전 정보, 설치 경로 출력 (확인용)
+        // API 서버 주소, 버전 정보 출력 (확인용)
         System.out.println("API 서버 주소: " + API_SERVER);
         System.out.println("현재 버전: " + CURRENT_VERSION);
-        System.out.println("설치 경로: " + installPath);
 
         UpdateUtil.checkUpdate();
 
-        String[] userInfo = SetupUserDialog.showDialog();
+        // 사용자 정보 입력 다이얼로그 호출
+        String[] userInfo = UserSettingDialog.showDialog();
         if (userInfo == null) return;
 
+        String userPw = userInfo[1];
+        String hint = userInfo[2];
+        int timerMin = Integer.parseInt(userInfo[3]);
+
         javax.swing.SwingUtilities.invokeLater(() -> {
-            new CampusSeat(userInfo[1], userInfo[2], Integer.parseInt(userInfo[3])).setVisible(true);
+            new CampusSeat(userPw, hint, timerMin).setVisible(true);
         });
     }
 }

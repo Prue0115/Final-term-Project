@@ -8,11 +8,6 @@ public class CampusSeatSetup {
     // 선택된 설치 경로를 저장하는 static 필드
     private static String installPath = System.getenv().getOrDefault("MYAPP_PATH", "C:\\Program Files\\CampusSeat");
 
-    /**
-     * 카카오톡 설치처럼 폴더 선택 다이얼로그를 표시하고, 선택된 경로를 저장합니다.
-     * 필요한 디스크 공간과 남은 디스크 공간을 실제로 계산해서 표시합니다.
-     * 설치 버튼 클릭 시 CampusSeat 폴더 생성, CampusSeat.exe 복사, 바탕화면 바로가기 생성
-     */
     public static void init() {
         // 색상 정의
         Color bgColor = new Color(250, 250, 250);
