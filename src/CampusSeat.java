@@ -11,7 +11,7 @@ public class CampusSeat extends JFrame {
     private Timer timer;
     private JPasswordField pwField;
     private JLabel hintLabel, timerLabel, datetimeLabel;
-    private JLabel dateLabel; // 날짜+요일 라벨 추가
+    private JLabel dateLabel;
 
     public CampusSeat(String userPw, String hint, int timerMin) {
         this.userPw = userPw;
@@ -24,9 +24,9 @@ public class CampusSeat extends JFrame {
         setAlwaysOnTop(true);
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        // 전체 레이아웃: BorderLayout
+        // 배경화면
         JPanel mainPanel = new JPanel(new BorderLayout()) {
-            private ImageIcon bgIcon = new ImageIcon("images/background.jpg"); // 또는 png
+            private ImageIcon bgIcon = new ImageIcon("images/background.jpg"); // 배경 이미지 경로
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -47,8 +47,8 @@ public class CampusSeat extends JFrame {
         topPanel.setOpaque(false);
 
         // 전원 아이콘 버튼 (클릭 시 팝업 메뉴)
-        ImageIcon rawIcon = new ImageIcon("images/power-button.png");
-        // 원하는 크기로 조절 (예: 32x32)
+        ImageIcon rawIcon = new ImageIcon("images/power-button.png"); // 전원 아이콘 경로
+        // 크기로 조절
         Image scaledImg = rawIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(scaledImg);
 
@@ -58,9 +58,9 @@ public class CampusSeat extends JFrame {
         powerBtn.setBorderPainted(false);
         powerBtn.setFocusPainted(false);
         powerBtn.setContentAreaFilled(false);
-        powerBtn.setIcon(scaledIcon); // 크기 조절된 아이콘 사용
+        powerBtn.setIcon(scaledIcon); 
 
-        // 팝업 메뉴 생성
+        // 전원 버튼 클릭 시 팝업 메뉴
         JPopupMenu powerMenu = new JPopupMenu();
         JMenuItem shutdownItem = new JMenuItem("시스템 종료");
         shutdownItem.addActionListener(e -> {
@@ -161,7 +161,7 @@ public class CampusSeat extends JFrame {
         JPanel pwAndHelpPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         pwAndHelpPanel.setOpaque(false);
 
-        // 비밀번호 입력 필드 생성
+        // 비밀번호 입력
         pwField = new JPasswordField();
         pwField.setFont(macFontPw);
         pwField.setBackground(new Color(220, 220, 220, 220));
@@ -181,10 +181,10 @@ public class CampusSeat extends JFrame {
                 g2.setStroke(new BasicStroke(2));
                 g2.draw(round);
 
-                // 플레이스홀더(암호 입력) 표시
+                // 암호 입력 표시
                 if (pwField.getPassword().length == 0 && !pwField.isFocusOwner()) {
                     g2.setFont(macFontPlaceholder);
-                    g2.setColor(new Color(255, 255, 255, 140)); // 반투명 흰색
+                    g2.setColor(new Color(255, 255, 255, 140)); 
                     FontMetrics fm = g2.getFontMetrics();
                     String placeholder = "암호 입력";
                     int x = 15;
@@ -252,7 +252,6 @@ public class CampusSeat extends JFrame {
         hintLabel.setPreferredSize(new Dimension(280, 24));
         centerPanel.add(hintLabel, gbc);
 
-        // 2. 비밀번호 입력 필드와 도움말 버튼을 힌트 아래에 배치 (x값 중앙 정렬, y값 유지)
         gbc.gridy++;
         gbc.gridx = 0; // 중앙 정렬
         gbc.anchor = GridBagConstraints.CENTER; // 중앙 anchor
