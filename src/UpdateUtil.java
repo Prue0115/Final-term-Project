@@ -1,36 +1,8 @@
 import java.net.*;
 import java.io.*;
 import javax.swing.*;
-import org.json.JSONObject;
 
 public class UpdateUtil {
-    // 서버에서 최신 버전 확인 및 다운로드
-    public static void checkUpdate() {
-        try {
-            URL url = new URI(Config.API_SERVER + "/check_update").toURL();
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
-
-            int code = conn.getResponseCode();
-            if (code == 200) {
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) sb.append(line);
-                JSONObject data = new JSONObject(sb.toString());
-                String latestVersion = data.optString("latest_version");
-                String downloadUrl = data.optString("download_url");
-                if (!Config.CURRENT_VERSION.equals(latestVersion) && !latestVersion.isEmpty()) {
-                    downloadAndReplace(downloadUrl);
-                }
-            }
-        } catch (Exception e) {
-            // 서버 연결 오류 무시
-        }
-    }
-
     // 새 버전 다운로드(AppData\CampusSeat\ update\CampusSeat.new)
     public static void downloadAndReplace(String downloadUrl) {
         try {
