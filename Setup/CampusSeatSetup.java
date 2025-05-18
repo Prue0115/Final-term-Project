@@ -7,6 +7,7 @@ import java.nio.file.*;
 public class CampusSeatSetup {
     // 선택된 설치 경로를 저장하는 static 필드
     private static String installPath = System.getenv().getOrDefault("MYAPP_PATH", "C:\\Program Files\\CampusSeat");
+    private static JTextField pathField; // 추가
 
     public static void init() {
         // 색상 정의
@@ -50,7 +51,7 @@ public class CampusSeatSetup {
         folderLabel.setBounds(20, 140, 80, 25);
         dialog.add(folderLabel);
 
-        JTextField pathField = new JTextField(installPath); // 반드시 위쪽에 선언
+        pathField = new JTextField(installPath); // 기존 선언 제거, 여기서 초기화만
         pathField.setBounds(100, 140, 340, 25);
         pathField.setBackground(Color.WHITE);
         pathField.setBorder(BorderFactory.createLineBorder(borderGray));
@@ -147,7 +148,10 @@ public class CampusSeatSetup {
             String basePath = pathField.getText().trim();
 
             // 항상 하위 폴더 이름을 CampusSeat로 고정
-            File dir = new File(basePath, "CampusSeat");
+            // File dir = new File(basePath, "CampusSeat");
+            // installPath = dir.getAbsolutePath();
+
+            File dir = new File(basePath); // 사용자가 선택한 경로 그대로 사용
             installPath = dir.getAbsolutePath();
 
             // 폴더가 없으면 생성
@@ -164,15 +168,19 @@ public class CampusSeatSetup {
 
             // 숨김 폴더(AppData\CampusSeat\ update) 생성 및 update.exe 복사
             try {
-                String updateDir = System.getenv("LOCALAPPDATA") + "\\CampusSeat\\update";
+                String localAppData = System.getenv("LOCALAPPDATA");
+                if (localAppData == null || localAppData.isEmpty()) {
+                    localAppData = System.getProperty("user.home") + "\\AppData\\Local";
+                }
+                String updateDir = localAppData + "\\CampusSeat\\update";
                 File updateFolder = new File(updateDir);
                 if (!updateFolder.exists()) updateFolder.mkdirs();
 
-                Path updaterSource = Paths.get("resources/CampusSeat_updata.exe"); // 실제 소스 경로
-                Path updaterTarget = Paths.get(updateDir, "CampusSeat_updata.exe");
+                Path updaterSource = Paths.get("resources/CampusSeat_update.exe"); // 실제 소스 경로
+                Path updaterTarget = Paths.get(updateDir, "CampusSeat_update.exe");
                 Files.copy(updaterSource, updaterTarget, StandardCopyOption.REPLACE_EXISTING);
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "CampusSeat_updata.exe 복사 실패: " + ex.getMessage());
+                JOptionPane.showMessageDialog(null, "CampusSeat_update.exe 복사 실패: " + ex.getMessage());
             }
 
             // 바탕화면에 바로가기 생성 (powershell 사용)
@@ -197,6 +205,15 @@ public class CampusSeatSetup {
 
             // 설치 후 사용자 정보 입력 다이얼로그 호출 (필요시)
             // SetupUserDialog.showDialog();
+
+            // 설치 경로 레지스트리에 저장
+            try {
+                String regCmd = "powershell";
+                String regArg = "Set-ItemProperty -Path 'HKCU:\\Software\\CampusSeat' -Name 'InstallPath' -Value '" + installPath + "' -Force";
+                new ProcessBuilder(regCmd, "-Command", regArg).start();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "설치 경로 레지스트리 저장 실패: " + ex.getMessage());
+            }
         });
         dialog.add(installBtn);
 

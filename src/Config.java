@@ -6,7 +6,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class Config {
-    public static final String API_SERVER = "http://campusseat.kro.kr:8888"; // API 서버 주소
+    public static final String API_SERVER = "http://172.30.1.41:8888"; // API 서버 주소
     public static final String CURRENT_VERSION = "1.0.0"; // 현재 버전
 
     public static void saveUserInfo(String studentId, String pw, String hint, int timerMin) {
@@ -42,6 +42,21 @@ public class Config {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String getInstallPathFromRegistry() {
+        try {
+            String[] cmd = {
+                "powershell",
+                "-Command",
+                "(Get-ItemProperty -Path 'HKCU:\\Software\\CampusSeat' -Name 'InstallPath').InstallPath"
+            };
+            Process proc = new ProcessBuilder(cmd).redirectErrorStream(true).start();
+            BufferedReader br = new BufferedReader(new InputStreamReader(proc.getInputStream(), "UTF-8"));
+            String path = br.readLine();
+            if (path != null && !path.trim().isEmpty()) return path.trim();
+        } catch (Exception ignored) {}
+        return "C:\\Program Files\\CampusSeat";
     }
 
     public static void main(String[] args) {

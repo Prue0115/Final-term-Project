@@ -1,11 +1,27 @@
 #include <windows.h>
 #include <stdio.h>
 
+char* getInstallPathFromRegistry(char* buf, DWORD bufSize) {
+    HKEY hKey;
+    if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\CampusSeat", 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+        DWORD type = REG_SZ;
+        if (RegQueryValueExA(hKey, "InstallPath", NULL, &type, (LPBYTE)buf, &bufSize) == ERROR_SUCCESS) {
+            RegCloseKey(hKey);
+            return buf;
+        }
+        RegCloseKey(hKey);
+    }
+    strcpy(buf, "C:\\Program Files\\CampusSeat");
+    return buf;
+}
+
 int main() {
-    // 설치 폴더 경로 (실제 설치 경로에 맞게 수정)
-    const char *installPath = "C:\\Program Files\\CampusSeat";
+    char installPath[MAX_PATH];
     char newExePath[MAX_PATH];
     char exePath[MAX_PATH];
+
+    // 레지스트리에서 설치 경로 가져오기
+    getInstallPathFromRegistry(installPath, sizeof(installPath));
 
     // 현재 실행 파일 위치에서 CampusSeat.new 찾기 (AppData\CampusSeat\update\CampusSeat.new)
     GetModuleFileNameA(NULL, newExePath, MAX_PATH);

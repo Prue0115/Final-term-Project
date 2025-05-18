@@ -13,6 +13,10 @@ public class CampusSeat extends JFrame {
     private JLabel hintLabel, timerLabel, datetimeLabel;
     private JLabel dateLabel;
 
+    // 클래스 필드에 추가
+    private Timer hintTimer;
+    private String lastHintText = ""; // 
+
     public CampusSeat(String userPw, String hint, int timerMin) {
         this.userPw = userPw;
         this.hint = hint;
@@ -105,7 +109,7 @@ public class CampusSeat extends JFrame {
         JPanel timerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         timerPanel.setOpaque(false);
         timerPanel.add(timerLabel);
-        northPanel.add(timerPanel, BorderLayout.WEST); // ← 이 줄을 추가하세요!
+        northPanel.add(timerPanel, BorderLayout.WEST); 
 
         // 우측: 전원버튼
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
@@ -120,7 +124,7 @@ public class CampusSeat extends JFrame {
         JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.setOpaque(false); // 배경 투명
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.insets = new Insets(5, 20, 20, 20);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -151,10 +155,10 @@ public class CampusSeat extends JFrame {
         gbc.gridwidth = 2;
 
         // ====== 화면 크기에 따라 비밀번호 입력 필드와 도움말 버튼을 동적으로 아래쪽에 배치 ======
-        // 화면 높이의 60% 위치에 배치
+        // 화면 높이의 50% 위치에 배치 (기존 60% → 50%로 10% 위로)
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int screenHeight = screenSize.height;
-        int topMargin = (int)(screenHeight * 0.6);
+        int topMargin = (int)(screenHeight * 0.5);
 
         gbc.insets = new Insets(topMargin, 20, 20, 20);
 
@@ -230,21 +234,30 @@ public class CampusSeat extends JFrame {
         helpBtn.setMaximumSize(new Dimension(helpIconSize, helpIconSize));
         helpBtn.setMinimumSize(new Dimension(helpIconSize, helpIconSize));
         helpBtn.setSize(new Dimension(helpIconSize, helpIconSize));
-        helpBtn.addActionListener(e -> JOptionPane.showMessageDialog(
-            this,
-            "관리자 : ###-####-####",
-            "도움말",
-            JOptionPane.INFORMATION_MESSAGE,
-            helpIcon // 다이얼로그에도 같은 아이콘 사용
-        ));
+        helpBtn.addActionListener(e -> {
+            // 힌트가 이미 도움말이면 타이머만 리셋
+            if ("관리자 : ###-####-####".equals(hintLabel.getText())) {
+                if (hintTimer != null && hintTimer.isRunning()) {
+                    hintTimer.restart();
+                }
+                return;
+            }
+            // 기존 힌트 저장
+            lastHintText = hintLabel.getText();
+            hintLabel.setText("관리자 : ###-####-####");
+            if (hintTimer != null && hintTimer.isRunning()) {
+                hintTimer.stop();
+            }
+            hintTimer = new Timer(10000, ev -> { //도움말 클릭 후 힌트 원상 복구 시간 ms
+                hintLabel.setText(lastHintText);
+                hintTimer.stop();
+            });
+            hintTimer.setRepeats(false);
+            hintTimer.start();
+        });
 
-        // ====== macOS 로그인 화면처럼 힌트가 위, 암호 입력이 아래로 오도록 배치 ======
-
-        // 1. 힌트 라벨을 화면 아래쪽(약 70%)에 먼저 배치 (x값 중앙 정렬, y값 유지)
-        gbc.gridy++;
-        gbc.gridx = 0; // 중앙 정렬
-        gbc.anchor = GridBagConstraints.CENTER; // 중앙 anchor
-        int macMargin = (int)(screenHeight * 0.7); // 화면 높이의 70% 위치
+        // 힌트 라벨을 화면 아래쪽(약 60% → 50%)에 먼저 배치 (x값 중앙 정렬, y값 유지)
+        int macMargin = (int)(screenHeight * 0.5); // 기존 0.6 또는 0.7 → 0.5로 변경
         gbc.insets = new Insets(macMargin, 0, 0, 0);
         hintLabel = new JLabel(" ", SwingConstants.CENTER);
         hintLabel.setFont(macFontSmall);
@@ -253,8 +266,8 @@ public class CampusSeat extends JFrame {
         centerPanel.add(hintLabel, gbc);
 
         gbc.gridy++;
-        gbc.gridx = 0; // 중앙 정렬
-        gbc.anchor = GridBagConstraints.CENTER; // 중앙 anchor
+        gbc.gridx = 0; 
+        gbc.anchor = GridBagConstraints.CENTER; // 
         gbc.insets = new Insets(10, 0, 0, 0);
         pwAndHelpPanel.add(pwField);
         pwAndHelpPanel.add(helpBtn);
@@ -311,7 +324,39 @@ public class CampusSeat extends JFrame {
     }
 
     private void unlockScreen(String msg) {
-        JOptionPane.showMessageDialog(this, msg, "잠금 해제", JOptionPane.INFORMATION_MESSAGE);
+        // macOS 스타일 커스텀 다이얼로그
+        JDialog dialog = new JDialog(this, "잠금 해제", true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        JPanel panel = new JPanel(new BorderLayout(0, 20));
+        panel.setBackground(Color.WHITE);
+
+        JLabel label = new JLabel(msg, SwingConstants.CENTER);
+        label.setFont(new Font("Apple SD Gothic Neo, SF Pro, 맑은 고딕, Malgun Gothic, SansSerif", Font.PLAIN, 18));
+        label.setForeground(new Color(60, 60, 60));
+        panel.add(label, BorderLayout.CENTER);
+
+        JButton okBtn = new JButton("확인");
+        okBtn.setFont(new Font("Apple SD Gothic Neo, SF Pro, 맑은 고딕, Malgun Gothic, SansSerif", Font.BOLD, 15));
+        okBtn.setBackground(new Color(240, 240, 240));
+        okBtn.setFocusPainted(false);
+        okBtn.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true));
+        okBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        JPanel btnPanel = new JPanel();
+        btnPanel.setBackground(Color.WHITE);
+        btnPanel.add(okBtn);
+        panel.add(btnPanel, BorderLayout.SOUTH);
+
+        dialog.getContentPane().add(panel);
+        dialog.setSize(320, 140);
+        dialog.setLocationRelativeTo(this);
+
+        dialog.getRootPane().setDefaultButton(okBtn);
+
+        okBtn.addActionListener(e -> dialog.dispose());
+        dialog.setVisible(true);
+
         dispose();
     }
 }
