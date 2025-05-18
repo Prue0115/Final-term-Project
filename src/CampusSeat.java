@@ -317,14 +317,47 @@ public class CampusSeat extends JFrame {
             unlocked = true;
             unlockScreen("관리자 권한으로 잠금 해제");
         } else {
-            hintLabel.setText(hint); // "힌트: " 없이 힌트만 표시
-            JOptionPane.showMessageDialog(this, "비밀번호가 틀렸습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+            // 힌트 라벨에 "암호가 틀렸습니다" 표시 및 진동 효과
+            showShakeHint("암호가 틀렸습니다");
             pwField.setText("");
         }
     }
 
+    // 진동 효과와 메시지 표시 메서드 추가
+    private void showShakeHint(String message) {
+        final int shakeDistance = 5; // 진동 거리(px)
+        final int shakeTimes = 5;   // 진동 횟수
+        final int delay = 13;        // 진동 속도(ms)
+
+        Point originalLocation = hintLabel.getLocation();
+        Color originalColor = new Color(220, 220, 220);
+
+        hintLabel.setText(message);
+        hintLabel.setForeground(originalColor);
+
+        Timer shakeTimer = new Timer(delay, null);
+        shakeTimer.addActionListener(new java.awt.event.ActionListener() {
+            int count = 0;
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                int direction = (count % 2 == 0) ? 1 : -1;
+                hintLabel.setLocation(originalLocation.x + direction * shakeDistance, originalLocation.y);
+                count++;
+                if (count >= shakeTimes) {
+                    shakeTimer.stop();
+                    hintLabel.setLocation(originalLocation);
+                    // 1초 후 원래 힌트로 복원
+                    new Timer(1000, ev -> {
+                        hintLabel.setText(hint != null && !hint.isEmpty() ? hint : " ");
+                        hintLabel.setForeground(originalColor);
+                    }) {{ setRepeats(false); }}.start();
+                }
+            }
+        });
+        shakeTimer.start();
+    }
+
     private void unlockScreen(String msg) {
-        // macOS 스타일 커스텀 다이얼로그
         JDialog dialog = new JDialog(this, "잠금 해제", true);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
