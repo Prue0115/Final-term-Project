@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
 
 public class Config {
     public static final String API_SERVER = "http://172.30.1.41:8888"; // API 서버 주소
@@ -57,6 +58,35 @@ public class Config {
             if (path != null && !path.trim().isEmpty()) return path.trim();
         } catch (Exception ignored) {}
         return "C:\\Program Files\\CampusSeat";
+    }
+
+    /**
+     * 최신 버전이 있으면 업데이트 안내 후 CampusSeat_update.exe 실행 (카카오톡 방식)
+     * @param downloadUrl 서버에서 받은 최신 CampusSeat.exe 다운로드 URL
+     */
+    public static void runUpdateProcess(String downloadUrl) {
+        int result = JOptionPane.showConfirmDialog(
+            null,
+            "새 버전이 있습니다. 지금 업데이트하시겠습니까?",
+            "업데이트 안내",
+            JOptionPane.YES_NO_OPTION
+        );
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                // 업데이트 폴더 경로
+                String updateDir = System.getenv("LOCALAPPDATA") + "\\CampusSeat\\update";
+                String updaterPath = updateDir + "\\CampusSeat_update.exe";
+                // downloadUrl을 인자로 넘김
+                String[] cmd = {
+                    "powershell",
+                    "Start-Process -FilePath '" + updaterPath + "' -ArgumentList '" + downloadUrl + "' -Verb runAs"
+                };
+                new ProcessBuilder(cmd).start();
+                System.exit(0);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "업데이트 실행 오류: " + e, "업데이트 실패", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     public static void main(String[] args) {
