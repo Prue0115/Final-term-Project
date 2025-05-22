@@ -7,8 +7,30 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 public class Config {
-    public static final String API_SERVER = "http://172.30.1.41:8888"; // API 서버 주소
+    public static final String API_SERVER = "http://campusseat.kro.kr:8888"; // API 서버 주소
     public static final String CURRENT_VERSION = "1.0.0"; // 현재 버전
+
+    // 서버에서 최신 버전 정보 받아오기
+    public static JSONObject getLatestVersionInfo() {
+        try {
+            URI uri = new URI(API_SERVER + "/api/version/latest");
+            URL url = uri.toURL();
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Accept", "application/json");
+            if (conn.getResponseCode() == 200) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) sb.append(line);
+                    return new JSONObject(sb.toString());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public static void saveUserInfo(String studentId, String pw, String hint, int timerMin) {
         try {
@@ -90,11 +112,18 @@ public class Config {
     }
 
     public static void main(String[] args) {
-        // API 서버 주소, 버전 정보 출력 (확인용)
-        System.out.println("API 서버 주소: " + API_SERVER);
-        System.out.println("현재 버전: " + CURRENT_VERSION);
+        // 1. 최신 버전 정보 조회
+        JSONObject latest = getLatestVersionInfo();
+        if (latest != null) {
+            String serverVersion = latest.optString("버전");
+            String downloadUrl = latest.optString("다운로드URL");
+            if (!CURRENT_VERSION.equals(serverVersion)) {
+                runUpdateProcess(downloadUrl);
+                return;
+            }
+        }
 
-        // 사용자 정보 입력 다이얼로그 호출
+        // 2. 사용자 정보 입력 다이얼로그 호출
         String[] userInfo = UserSettingDialog.showDialog();
         if (userInfo == null) return;
 
