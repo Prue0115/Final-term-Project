@@ -96,7 +96,7 @@
 ![Image](https://github.com/user-attachments/assets/9107dc6e-6bf7-4cbc-85a3-e8fe54d7461c)
 
 ## DB 테이블
-**API 서버에서 받은 입력 정보를 DB user info 테이블에 학번, 암호, 암호 힌트, 타이머, 저장된 화면**
+**API 서버에서 받은 입력 정보를 DB user info 테이블에 학번, 암호, 암호 힌트, 타이머가 저장된 화면**
 
 ![Image](https://github.com/user-attachments/assets/53261ab3-a059-485f-9471-579cda436f96)
 ---
