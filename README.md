@@ -79,23 +79,26 @@
 ---
 ## CampusSeat 프로그램 실행 화면
 **입력 창 (학번, 비밀번호, 비밀번호 힌트, 타이머 입력 후 확인 버튼)**
-![[입력 창.png]]
+
+![Image](https://github.com/user-attachments/assets/db54ac1f-c0b0-4c94-8326-a212cc7147ec)
 
 **잠금 화면**
-![[잠금화면.jpg]]
+![Image](https://github.com/user-attachments/assets/faa1a63b-f9b8-4303-9aed-cb9596a077ec)
 
 **잠금 화면 도움말 (? 클릭)**
-![[도움말 호출.png]]
+
+![Image](https://github.com/user-attachments/assets/8b823953-94a7-418a-a57a-46e81153f81b)
 
 **잠금 화면 전원 메뉴**
-![[전원 메뉴.png]]
+
+![Image](https://github.com/user-attachments/assets/29a17977-e4f4-4555-95ab-04b9d5b2e2c0)
 ## Spring Boot API Server CMD 
-![[Spring Boot API CMD.jpg]]
+![Image](https://github.com/user-attachments/assets/9107dc6e-6bf7-4cbc-85a3-e8fe54d7461c)
 
 ## DB 테이블
-**API 서버에서 받은 입력 정보를 DB user info 테이블에 학번, 암호, 암호 힌트, 타이머, 저장된 화면**
-![[DB 저장.png]]
+**API 서버에서 받은 입력 정보를 DB user info 테이블에 학번, 암호, 암호 힌트, 타이머가 저장된 화면**
 
+![Image](https://github.com/user-attachments/assets/53261ab3-a059-485f-9471-579cda436f96)
 ---
 
 [^1]: 
