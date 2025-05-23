@@ -94,6 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "README.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks"
+              "title": "README 의 백링크"
             }
           },
           {
@@ -166,15 +167,17 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "afb0fd05d78c731c",
+  "active": "9af14b7a02c7a09c",
   "lastOpenFiles": [
-    "DB 저장.png",
-    "전원 메뉴.png",
-    "잠금화면.jpg",
-    "도움말 호출.png",
-    "입력 창 1.png",
-    "입력 창.png",
-    "Spring Boot API CMD.jpg",
-    "KakaoTalk_20250523_152755565.jpg"
+    "attachments/도움말 호출.png",
+    "attachments/DB 저장.png",
+    "attachments",
+    "README.md",
+    "attachments/KakaoTalk_20250523_152755565.jpg",
+    "attachments/전원 메뉴.png",
+    "attachments/잠금화면.jpg",
+    "attachments/입력 창 1.png",
+    "attachments/입력 창.png",
+    "Spring Boot API CMD.jpg"
   ]
 }
