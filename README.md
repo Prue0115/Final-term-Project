@@ -81,14 +81,11 @@
 **입력 창 (학번, 비밀번호, 비밀번호 힌트, 타이머 입력 후 확인 버튼)**
 ![입력 창](https://github.com/user-attachments/assets/25b00779-1c7f-4d46-9e82-673924c41755)
 
-
 **잠금 화면**
 ![잠금화면](https://github.com/user-attachments/assets/d95a4c66-6d5e-48dc-be20-f035ae0b90c5)
 
-
 **잠금 화면 도움말 (? 클릭)**
 ![도움말 호출](https://github.com/user-attachments/assets/e6d097ba-e165-4849-b3b2-bd8e4c513e6a)
-
 
 **잠금 화면 전원 메뉴**
 ![전원 메뉴](https://github.com/user-attachments/assets/3e298f5f-3161-4e14-8625-133bbe265ee7)
