@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 public class Config {
-    public static final String API_SERVER = "http://172.30.1.41:8888";
+    public static final String API_SERVER = "http://118.44.154.168:8888";
     public static final String CURRENT_VERSION = "1.0.0";
 
     // 서버에서 최신 버전 정보 받아오기
