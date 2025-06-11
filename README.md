@@ -91,6 +91,9 @@
 **잠금 화면 전원 메뉴**
 
 ![Image](https://github.com/user-attachments/assets/29a17977-e4f4-4555-95ab-04b9d5b2e2c0)
+---
+관리 서버
+---
 ## Spring Boot API Server CMD 
 ![Image](https://github.com/user-attachments/assets/9107dc6e-6bf7-4cbc-85a3-e8fe54d7461c)
 
